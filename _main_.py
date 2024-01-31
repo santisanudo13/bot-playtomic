@@ -87,6 +87,8 @@ if __name__ == "__main__":
                     if pac.book_court(resource_id=resources[num_court]['resource_id'], tenant_id=properties.get_property('tenant_id'), start=start) is not None:
                         court_booked = True
                         logging.info(f"      Duration is 90 minutes and within optimal time range: {slot['start_time']}. Booking court......")
+        if not court_booked:
+            logging.info(f"There wasn't any available slot to be booked the {arrow.now().strftime('%m-%d-%Y')} at 18, 18.30, 19 or 19.30")
     else:
         logging.info(f"Canceling Booking since it's not an allowed Day. Only Allowed [MONDAY, WEDNESDAY, THURSDAY]")
                 
