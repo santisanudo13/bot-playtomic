@@ -53,7 +53,7 @@ if __name__ == "__main__":
     days_of_week[5] = 'SATURDAY'
     days_of_week[6] = 'SUNDAY'
     logging.info(f"Current Day Calculating Booking is: {days_of_week[arrow.now().shift(days=4).datetime.weekday()]}: {arrow.now().strftime('%m-%d-%Y')}")
-    if arrow.now().shift(days=4).datetime.weekday() in [0,2,3] or True:
+    if arrow.now().shift(days=4).datetime.weekday() in [0,2,3]:
         logging.info(f"Proceeding to Book since it's withing Allowed Days ")
         logging.info(f"Retrieving Padel Club Data")
         central_padel_tenant = pac.get_tenant(tenant_id=properties.get_property('tenant_id'))
