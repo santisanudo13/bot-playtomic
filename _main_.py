@@ -39,6 +39,7 @@ def retrieve_court_availability(resources):
                 num_court = num
                 break
         resources[num_court]['slots'] = court['slots']
+        resources[num_court]['slots'] = list(resources[num_court]['slots'])
         logging.info(f"   Retrieved Availability of Court: {resources[num_court]['name']} -> {resources[num_court]['resource_id']}")
 
 if __name__ == "__main__":
@@ -73,7 +74,9 @@ if __name__ == "__main__":
         court_booked = False
 
         logging.info(f"Reviewing Availability of Courts")
-        for num_court in resources:
+        for num_court in [1,4,2,3,5,7,6]:
+            num_court = str(num_court)
+            resource = resources[num_court]
             if court_booked:
                 break
             logging.info(f"   Reviewing Availability of Court {resources[num_court]['name']} -> {resources[num_court]['resource_id']}")
