@@ -119,7 +119,7 @@ if __name__ == "__main__":
                     
                         if pac.book_court(resource_id=resources[num_court]['resource_id'], tenant_id=properties.get_property('tenant_id'), start=start) is not None:
                             court_booked = True
-                            add_current_date_to_booked(target_date==target_date.strftime('%m-%d-%Y'))
+                            add_current_date_to_booked(target_date=target_date.strftime('%m-%d-%Y'))
                             logging.info(f"     >>>>>>>>>> Court Booked: {slot['start_time']} <<<<<<<<<<< ")
             if not court_booked:
                 logging.info(f"There wasn't any available slot to be booked the {target_date.strftime('%m-%d-%Y')} at 18, 18.30, 19 or 19.30")
