@@ -113,7 +113,7 @@ if __name__ == "__main__":
                 for slot in resources[num_court]['slots']:
                     if court_booked:
                         break
-                    if slot['duration'] == 90 and (slot['start_time'] == '18:00:00' or slot['start_time'] == '18:30:00' or slot['start_time'] == '19:00:00' or slot['start_time'] == '19:30:00'):
+                    if slot['duration'] == 90 and (slot['start_time'] == '17:00:00' or slot['start_time'] == '17:30:00' or slot['start_time'] == '18:00:00' or slot['start_time'] == '18:30:00'):
                         start = start_min = f"{target_date.strftime('%Y-%m-%dT')}{slot['start_time']}"
                         logging.info(f"      Duration is 90 minutes and within optimal time range: {start}. Booking court {resources[num_court]['name']}......")
                     
