@@ -47,14 +47,19 @@ def check_if_current_day_already_booked(current_day):
     with open('booked_days.yml', 'r') as file:
         yaml_file = yaml.safe_load(file)
         try:
-            return current_day in yaml_file 
+            if yaml_file is None:
+                return False
+            else:
+                return current_day in yaml_file 
         except:
             return False
         
 def add_current_date_to_booked(current_day):
     with open('booked_days.yml','r') as yamlfile:
         cur_yaml = yaml.safe_load(yamlfile) # Note the safe_load
-        cur_yaml[current_day].update(True)
+        if cur_yaml is None:
+            cur_yaml = dict()
+        cur_yaml[current_day] = True
 
     if cur_yaml:
         with open('booked_days.yml','w') as yamlfile:
@@ -109,7 +114,7 @@ if __name__ == "__main__":
                         if pac.book_court(resource_id=resources[num_court]['resource_id'], tenant_id=properties.get_property('tenant_id'), start=start) is not None:
                             court_booked = True
                             add_current_date_to_booked(current_day=arrow.now().strftime('%m-%d-%Y'))
-                            logging.info(f"      Duration is 90 minutes and within optimal time range: {slot['start_time']}. Booking court......")
+                            logging.info(f"     >>>>>>>>>> Court Booked: {slot['start_time']} <<<<<<<<<<< ")
             if not court_booked:
                 logging.info(f"There wasn't any available slot to be booked the {arrow.now().strftime('%m-%d-%Y')} at 18, 18.30, 19 or 19.30")
         else:
