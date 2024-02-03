@@ -76,12 +76,9 @@ def calculate_if_valid_day_of_week(target_date):
     days_of_week[6] = 'SUNDAY'
     logging.info(f"Current Day Calculating Booking is: {days_of_week[target_date.datetime.weekday()]}: {target_date.strftime('%m-%d-%Y')}")
     return target_date.datetime.weekday() in [0,2,3,4]
-        
-if __name__ == "__main__":
-    target_date = arrow.now().shift(days=4)
-    current_date = arrow.now()
+
+def book_target_day(target_date):
     
-    init_logging(current_date=current_date)
     
     if calculate_if_valid_day_of_week(target_date=target_date):
         if not check_if_target_day_already_booked(target_date=target_date.strftime('%m-%d-%Y')):
@@ -128,6 +125,17 @@ if __name__ == "__main__":
     else:
         logging.info(f"Canceling Booking since it's not an allowed Day. Only Allowed [MONDAY, WEDNESDAY, THURSDAY]")
                 
+        
+if __name__ == "__main__":
+    current_date=arrow.now()
+    init_logging(current_date=current_date)
+    book_target_day(target_date=arrow.now().shift(days=0))
+    book_target_day(target_date=arrow.now().shift(days=1))
+    book_target_day(target_date=arrow.now().shift(days=2))
+    book_target_day(target_date=arrow.now().shift(days=3))
+    book_target_day(target_date=arrow.now().shift(days=4))
+
+    
     
     
             
