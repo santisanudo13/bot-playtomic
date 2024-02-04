@@ -111,8 +111,8 @@ def book_target_day(target_date):
                     for slot in resources[num_court]['slots']:
                         if court_booked:
                             break
-                        if slot['duration'] == 90 and (slot['start_time'] == '17:00:00' or slot['start_time'] == '17:30:00' or slot['start_time'] == '18:00:00' or slot['start_time'] == '18:30:00'):
-                            start = start_min = f"{target_date.strftime('%Y-%m-%dT')}{slot['start_time']}"
+                        if slot['duration'] == 90 and (slot['start_time'] == '17:00:00' or slot['start_time'] == '17:30:00' or slot['start_time'] == '18:00:00' or slot['start_time'] == '18:30:00' or slot['start_time'] == '19:00:00'):
+                            start = f"{target_date.strftime('%Y-%m-%dT')}{slot['start_time']}"
                             logging.info(f"      Duration is 90 minutes and within optimal time range: {start}. Booking court {resources[num_court]['name']}......")
                         
                             if pac.book_court(resource_id=resources[num_court]['resource_id'], tenant_id=properties.get_property('tenant_id'), start=start) is not None:
