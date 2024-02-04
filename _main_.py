@@ -107,17 +107,20 @@ def book_target_day(target_date):
                 if court_booked:
                     break
                 logging.info(f"   Reviewing Availability of Court {resources[num_court]['name']} -> {resources[num_court]['resource_id']}")
-                for slot in resources[num_court]['slots']:
-                    if court_booked:
-                        break
-                    if slot['duration'] == 90 and (slot['start_time'] == '17:00:00' or slot['start_time'] == '17:30:00' or slot['start_time'] == '18:00:00' or slot['start_time'] == '18:30:00'):
-                        start = start_min = f"{target_date.strftime('%Y-%m-%dT')}{slot['start_time']}"
-                        logging.info(f"      Duration is 90 minutes and within optimal time range: {start}. Booking court {resources[num_court]['name']}......")
-                    
-                        if pac.book_court(resource_id=resources[num_court]['resource_id'], tenant_id=properties.get_property('tenant_id'), start=start) is not None:
-                            court_booked = True
-                            add_current_date_to_booked(target_date=target_date.strftime('%m-%d-%Y'))
-                            logging.info(f"     >>>>>>>>>> Court Booked: {slot['start_time']} <<<<<<<<<<< ")
+                if 'slots' in resources[num_court].keys():
+                    for slot in resources[num_court]['slots']:
+                        if court_booked:
+                            break
+                        if slot['duration'] == 90 and (slot['start_time'] == '17:00:00' or slot['start_time'] == '17:30:00' or slot['start_time'] == '18:00:00' or slot['start_time'] == '18:30:00'):
+                            start = start_min = f"{target_date.strftime('%Y-%m-%dT')}{slot['start_time']}"
+                            logging.info(f"      Duration is 90 minutes and within optimal time range: {start}. Booking court {resources[num_court]['name']}......")
+                        
+                            if pac.book_court(resource_id=resources[num_court]['resource_id'], tenant_id=properties.get_property('tenant_id'), start=start) is not None:
+                                court_booked = True
+                                add_current_date_to_booked(target_date=target_date.strftime('%m-%d-%Y'))
+                                logging.info(f"     >>>>>>>>>> Court Booked: {slot['start_time']} <<<<<<<<<<< ")
+                else:
+                    logging.info(f"No booking slots available to be booked yet {target_date.strftime('%m-%d-%Y')}")
             if not court_booked:
                 logging.info(f"There wasn't any available slot to be booked the {target_date.strftime('%m-%d-%Y')} at 18, 18.30, 19 or 19.30")
         else:
@@ -129,11 +132,9 @@ def book_target_day(target_date):
 if __name__ == "__main__":
     current_date=arrow.now()
     init_logging(current_date=current_date)
-    book_target_day(target_date=arrow.now().shift(days=0))
-    book_target_day(target_date=arrow.now().shift(days=1))
-    book_target_day(target_date=arrow.now().shift(days=2))
-    book_target_day(target_date=arrow.now().shift(days=3))
-    book_target_day(target_date=arrow.now().shift(days=4))
+    for index in range(7):
+        book_target_day(target_date=arrow.now().shift(days=index))
+    
 
     
     
