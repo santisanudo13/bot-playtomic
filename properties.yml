@@ -1,4 +1,5 @@
-tenant_id: 
+tenant_id_central: 
+tenant_id_alday: 
 username: 
 password: 
 gmail_app_password: 
