@@ -104,7 +104,7 @@ def book_target_day(target_date, club_id):
                         for slot in resources[num_court]['slots']:
                             if court_booked:
                                 break
-                            if slot['duration'] == 90 and (slot['start_time'] == '17:00:00' or slot['start_time'] == '17:30:00' or slot['start_time'] == '18:00:00' or slot['start_time'] == '18:30:00' or slot['start_time'] == '19:00:00' or slot['start_time'] == '19:30:00'):
+                            if slot['duration'] == 90 and (slot['start_time'] == '17:00:00' or slot['start_time'] == '17:30:00' or slot['start_time'] == '18:00:00' or slot['start_time'] == '18:30:00' or slot['start_time'] == '19:00:00'):
                                 start = f"{target_date.strftime('%Y-%m-%dT')}{slot['start_time']}"
                                 logging.info(f"      Duration is 90 minutes and within optimal time range: {start}. Booking court {resources[num_court]['name']}......")
                             
@@ -114,7 +114,7 @@ def book_target_day(target_date, club_id):
                                     logging.info(f"     >>>>>>>>>> Court Booked: {slot['start_time']} <<<<<<<<<<< ")
                     
             if not court_booked:
-                logging.info(f"         There wasn't any available slot to be booked the {target_date.strftime('%m-%d-%Y')} at 18, 18.30, 19, 19.30, 20 or 20.30")
+                logging.info(f"         There wasn't any available slot to be booked the {target_date.strftime('%m-%d-%Y')} at 18, 18.30, 19, 19.30, 20")
         
     
                 
