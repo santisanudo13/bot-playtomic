@@ -108,7 +108,7 @@ def book_target_day(target_date, club_id):
                                 start = f"{target_date.strftime('%Y-%m-%dT')}{slot['start_time']}"
                                 logging.info(f"      Duration is 90 minutes and within optimal time range: {start}. Booking court {resources[num_court]['name']}......")
                             
-                                if pac.book_court(resource_id=resources[num_court]['resource_id'], tenant_id=properties.get_property('tenant_id'), start=start) is not None:
+                                if pac.book_court(resource_id=resources[num_court]['resource_id'], tenant_id=club_id, start=start) is not None:
                                     court_booked = True
                                     add_current_date_to_booked(target_date=target_date.strftime('%m-%d-%Y'))
                                     logging.info(f"     >>>>>>>>>> Court Booked: {slot['start_time']} <<<<<<<<<<< ")
