@@ -125,7 +125,7 @@ if __name__ == "__main__":
     current_date=arrow.now()
     init_logging(current_date=current_date)
     
-    for index in range(4, 0, -1):
+    for index in range(5, 0, -1):
 
         logging.info(f"________________________________________________________________________________")
         target_date = arrow.now().shift(days=index)
