@@ -113,9 +113,8 @@ def book_court(tenant_id, resource_id, start):
                     
                     try:
                         balance = float(payment_method['data']['balance'].split(' ')[0]) - (float(payment_intent['price'].split(' ')[0]) - float(payment_intent['commission'].split(' ')[0]))
-                        logging.info(f"----------Current Balance {payment_method['data']['balance']} before payment----------")
-                        if balance < 15:
-                            send_mail_notification(sender=properties.get_property('username'), to=properties.get_property('username'), subject=f"Playtomic Wallet Ballance: {payment_method['data']['balance']}", body=f"Please, renew your wallete balance since current balance is {payment_method['data']['balance']} and after payment it will be {balance - ()}")
+                        logging.info(f"----------Current Balance {payment_method['data']['balance']} before payment----------")    
+                        send_mail_notification(sender=properties.get_property('username'), to=properties.get_property('username'), subject=f"Playtomic Wallet Ballance: {payment_method['data']['balance']}", body=f"Your wallete balance is {payment_method['data']['balance']}.")
                         
                     except Exception as e:
                         logging.error(f"Error calculating remaining balance")
