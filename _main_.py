@@ -94,24 +94,31 @@ def book_target_day(target_date, club_id):
     
     court_booked = False
 
-    for num_court in [1,4,2,3,5,7,6]:
-        num_court = str(num_court)
-        if num_court in resources.keys():
-            resource = resources[num_court]
+    for time in ['17:00:00', '17:30:00', '18:00:00', '18:30:00', '19:00:00']:
+        if court_booked:
+            break
+
+        for num_court in [4,1,2,3,5,7,6]:
             if court_booked:
                 break
-            if 'slots' in resources[num_court].keys():
-                for slot in resources[num_court]['slots']:
-                    if court_booked:
-                        break
-                    if slot['duration'] == 90 and (slot['start_time'] == '17:00:00' or slot['start_time'] == '17:30:00' or slot['start_time'] == '18:00:00' or slot['start_time'] == '18:30:00' or slot['start_time'] == '19:00:00'):
-                        start = f"{target_date.strftime('%Y-%m-%dT')}{slot['start_time']}"
-                        logging.info(f"      Duration is 90 minutes and within optimal time range: {start}. Booking court {resources[num_court]['name']}......")
-                    
-                        if pac.book_court(resource_id=resources[num_court]['resource_id'], tenant_id=club_id, start=start) is not None:
-                            court_booked = True
-                            add_current_date_to_booked(target_date=target_date.strftime('%m-%d-%Y'))
-                            logging.info(f"     >>>>>>>>>> Court Booked: {slot['start_time']} <<<<<<<<<<< ")
+
+            num_court = str(num_court)
+            if num_court in resources.keys():
+                resource = resources[num_court]
+                
+                if 'slots' in resources[num_court].keys():
+                    for slot in resources[num_court]['slots']:
+                        if court_booked:
+                            break
+
+                        if slot['duration'] == 90 and slot['start_time'] == time:
+                            start = f"{target_date.strftime('%Y-%m-%dT')}{slot['start_time']}"
+                            logging.info(f"      Duration is 90 minutes and within optimal time range: {start}. Booking court {resources[num_court]['name']}......")
+                        
+                            if pac.book_court(resource_id=resources[num_court]['resource_id'], tenant_id=club_id, start=start) is not None:
+                                court_booked = True
+                                add_current_date_to_booked(target_date=target_date.strftime('%m-%d-%Y'))
+                                logging.info(f"     >>>>>>>>>> Court Booked: {slot['start_time']} <<<<<<<<<<< ")
             
     if not court_booked:
         logging.info(f"         There wasn't any available slot to be booked the {target_date.strftime('%m-%d-%Y')} at 18, 18.30, 19, 19.30, 20")
@@ -136,4 +143,4 @@ if __name__ == "__main__":
             else:
                 logging.info(f"______Current day is listed as already booked: {target_date.strftime('%m-%d-%Y')}______")
         else:
-            logging.info(f"   Canceling Booking since it's not an allowed Day. Only Allowed [MONDAY, WEDNESDAY, THURSDAY]")
+            logging.info(f"   Canceling Booking since it's not an allowed Day. Only Allowed [MONDAY, WEDNESDAY, THURSDAY, FRIDAY]")
