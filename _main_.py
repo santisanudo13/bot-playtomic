@@ -94,7 +94,7 @@ def book_target_day(target_date, club_id):
     
     court_booked = False
 
-    for time in ['17:00:00', '17:30:00', '18:00:00', '18:30:00', '19:00:00']:
+    for time in ['16:00:00', '16:30:00', '17:00:00', '17:30:00', '18:00:00']:
         if court_booked:
             break
 
