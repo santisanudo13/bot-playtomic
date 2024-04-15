@@ -98,7 +98,7 @@ def book_target_day(target_date, club_id):
         if court_booked:
             break
 
-        for num_court in [4,1,2,3,5,7,6]:
+        for num_court in [4,1,3,5,7,2,6]:
             if court_booked:
                 break
 
