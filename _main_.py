@@ -139,7 +139,8 @@ if __name__ == "__main__":
         if calculate_if_valid_day_of_week(target_date=target_date):
             if not check_if_target_day_already_booked(target_date=target_date.strftime('%m-%d-%Y')):
                 if not book_target_day(target_date=target_date, club_id=properties.get_property('tenant_id_central')):
-                    book_target_day(target_date=target_date, club_id=properties.get_property('tenant_id_alday'))
+                    logging.info(f"______---------------------No Available SLOTS")
+                    #book_target_day(target_date=target_date, club_id=properties.get_property('tenant_id_alday'))
             else:
                 logging.info(f"______Current day is listed as already booked: {target_date.strftime('%m-%d-%Y')}______")
         else:
