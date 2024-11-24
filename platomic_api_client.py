@@ -131,7 +131,6 @@ def book_court(tenant_id, resource_id, start):
             body = {"selected_payment_method_id":f"{payment_method_id}","selected_payment_method_data": None}
             random_delay()
             response = requests.request("PATCH", url=f"{BASE_URL}/api/v1/payment_intents/{payment_intent['payment_intent_id']}", headers={'Content-Type': HEADER_APPLICATION_JSON, 'Accept': HEADER_ACCEPT_ALL, 'Authorization': f"Bearer {login()}"}, json=body)
-            #payemnt_intent_modified =  response.json()
             if response.status_code == 200:
                 
                 random_delay()
@@ -144,14 +143,7 @@ def book_court(tenant_id, resource_id, start):
         return ''
     
     
-def send_mail_notification(sender, to, subject, body):
-    email_html = f"""
-    <html>
-        <body>
-            <p>{body}</p>
-        </body>
-    </html>"""
-    
+def send_mail_notification(sender, to, subject, body):   
     msg = MIMEText(body, 'html')
     msg['Subject'] = subject
     msg['From'] = sender
