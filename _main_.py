@@ -94,7 +94,7 @@ def book_target_day(target_date, club_id):
     
     court_booked = False
 
-    for time in ['18:00:00', '18:30:00', '19:00:00', '19:30:00',]:
+    for time in ['17:00:00', '17:30:00', '18:00:00', '18:30:00',]:
         if court_booked:
             break
 
@@ -132,15 +132,17 @@ if __name__ == "__main__":
     current_date=arrow.now()
     init_logging(current_date=current_date)
     
-    for index in range(5, 0, -1):
+    for index in range(2, 5, 1):
 
         logging.info(f"________________________________________________________________________________")
         target_date = arrow.now().shift(days=index)
         if calculate_if_valid_day_of_week(target_date=target_date):
             if not check_if_target_day_already_booked(target_date=target_date.strftime('%m-%d-%Y')):
                 if not book_target_day(target_date=target_date, club_id=properties.get_property('tenant_id_central')):
-                    logging.info(f"______---------------------No Available SLOTS")
-                    #book_target_day(target_date=target_date, club_id=properties.get_property('tenant_id_alday'))
+                    logging.info(f"---------------------No Available SLOTS -- Central -- {target_date.strftime('%m-%d-%Y')}")
+                    if not book_target_day(target_date=target_date, club_id=properties.get_property('tenant_id_alday')):
+                        logging.info(f"---------------------No Available SLOTS -- Alday -- {target_date.strftime('%m-%d-%Y')}")
+
             else:
                 logging.info(f"______Current day is listed as already booked: {target_date.strftime('%m-%d-%Y')}______")
         else:
