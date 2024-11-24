@@ -162,9 +162,8 @@ def send_mail_notification(sender, to, subject, body):
     pass
     
 def random_delay():
-    random_delay = random.randrange(1,10)
-    final_random_delay = random_delay*2/10
-    time.sleep(final_random_delay)
+    MAX_WAIT_SECONDS = 4
+    time.sleep(random.randrange(1,10)*MAX_WAIT_SECONDS/10)
     
 
     
