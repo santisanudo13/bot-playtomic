@@ -51,7 +51,7 @@ def check_if_target_day_already_booked(target_date):
                 return False
             else:
                 return target_date in yaml_file 
-        except Exception
+        except Exception:
             return False
         
 def add_current_date_to_booked(target_date):
