@@ -12,6 +12,9 @@ BASE_URL = 'https://playtomic.io'
 USER = None
 PASSWORD = None
 
+HEADER_APPLICATION_JSON = 'application/json'
+HEADER_ACCEPT_ALL = 'application/json, text/plain, */*'
+
 #Returns the access token use in the API
 def login():
     global USER, PASSWORD    
@@ -22,10 +25,10 @@ def login():
    
     try:
         random_delay()
-        response = requests.request("POST", url=f"{BASE_URL}/api/v3/auth/login", headers={'Content-Type': 'application/json'}, data=json.dumps({"email": USER,"password": PASSWORD}))
+        response = requests.request("POST", url=f"{BASE_URL}/api/v3/auth/login", headers={'Content-Type': HEADER_APPLICATION_JSON}, data=json.dumps({"email": USER,"password": PASSWORD}))
         return response.json()['access_token']
     except Exception as e:
-        logging.error(f"Error generating access token")
+        logging.error(f"Error generating access token: {e}")
         return ''
     
 #Returns the access token use in the API
@@ -38,29 +41,29 @@ def get_user_id():
    
     try:
         random_delay()
-        response = requests.request("POST", url=f"{BASE_URL}/api/v3/auth/login", headers={'Content-Type': 'application/json'}, data=json.dumps({"email": USER,"password": PASSWORD}))
+        response = requests.request("POST", url=f"{BASE_URL}/api/v3/auth/login", headers={'Content-Type': HEADER_APPLICATION_JSON}, data=json.dumps({"email": USER,"password": PASSWORD}))
         return response.json()['user_id']
     except Exception as e:
-        logging.error(f"Error generating access token")
+        logging.error(f"Error generating access token: {e}")
         return ''
 
 #Gets tenant (Club)
 def get_tenant(tenant_id):
     try:
         random_delay()
-        response = requests.request("GET", url=f"{BASE_URL}/api/v1/tenants/{tenant_id}", headers={'Content-Type': 'application/json', 'Authorization': f"Bearer {login()}"})
+        response = requests.request("GET", url=f"{BASE_URL}/api/v1/tenants/{tenant_id}", headers={'Content-Type': HEADER_APPLICATION_JSON, 'Authorization': f"Bearer {login()}"})
         return response.json()
     except Exception as e:
-        logging.error(f"Error returning tenant")
+        logging.error(f"Error returning tenant {e}")
         return ''
 
 def get_tenant_availability(tenant_id, start_min, start_max):
     try:
         random_delay()
-        response = requests.request("GET", url=f"{BASE_URL}/api/v1/availability", headers={'Content-Type': 'application/json', 'Authorization': f"Bearer {login()}"}, params={'user_id': 'me', 'tenant_id': {tenant_id}, 'sport_id': 'PADEL', 'local_start_min': start_min, 'local_start_max': start_max})
+        response = requests.request("GET", url=f"{BASE_URL}/api/v1/availability", headers={'Content-Type': HEADER_APPLICATION_JSON, 'Authorization': f"Bearer {login()}"}, params={'user_id': 'me', 'tenant_id': {tenant_id}, 'sport_id': 'PADEL', 'local_start_min': start_min, 'local_start_max': start_max})
         return response.json()
     except Exception as e:
-        logging.error(f"Error returning tenant availability")
+        logging.error(f"Error returning tenant availability {e}")
         return ''
     
 def book_court(tenant_id, resource_id, start):
@@ -104,7 +107,7 @@ def book_court(tenant_id, resource_id, start):
         }
         
         random_delay()
-        response = requests.request("POST", url=f"{BASE_URL}/api/v1/payment_intents", headers={'Content-Type': 'application/json', 'Accept': 'application/json, text/plain, */*', 'Authorization': f"Bearer {login()}"}, json=body)
+        response = requests.request("POST", url=f"{BASE_URL}/api/v1/payment_intents", headers={'Content-Type': HEADER_APPLICATION_JSON, 'Accept': HEADER_ACCEPT_ALL, 'Authorization': f"Bearer {login()}"}, json=body)
         if response.status_code == 200:
             #we update the order to pay with the wallet (Monedero)
             payment_intent = response.json()
@@ -116,29 +119,28 @@ def book_court(tenant_id, resource_id, start):
                     payment_method_id = payment_method['payment_method_id']
                     
                     try:
-                        balance = float(payment_method['data']['balance'].split(' ')[0]) - (float(payment_intent['price'].split(' ')[0]) - float(payment_intent['commission'].split(' ')[0]))
                         logging.info(f"----------Current Balance {payment_method['data']['balance']} before payment----------")    
                         send_mail_notification(sender=properties.get_property('username'), to=properties.get_property('username'), subject=f"Playtomic Wallet Ballance: {payment_method['data']['balance']}", body=f"Your wallete balance is {payment_method['data']['balance']}.")
                         
                     except Exception as e:
-                        logging.error(f"Error calculating remaining balance")
+                        logging.error(f"Error calculating remaining balance: {e}")
                     
                     break
                     
             
             body = {"selected_payment_method_id":f"{payment_method_id}","selected_payment_method_data": None}
             random_delay()
-            response = requests.request("PATCH", url=f"{BASE_URL}/api/v1/payment_intents/{payment_intent['payment_intent_id']}", headers={'Content-Type': 'application/json', 'Accept': 'application/json, text/plain, */*', 'Authorization': f"Bearer {login()}"}, json=body)
-            payemnt_intent_modified =  response.json()
+            response = requests.request("PATCH", url=f"{BASE_URL}/api/v1/payment_intents/{payment_intent['payment_intent_id']}", headers={'Content-Type': HEADER_APPLICATION_JSON, 'Accept': HEADER_ACCEPT_ALL, 'Authorization': f"Bearer {login()}"}, json=body)
+            #payemnt_intent_modified =  response.json()
             if response.status_code == 200:
                 
                 random_delay()
-                response = requests.request("POST", url=f"{BASE_URL}/api/v1/payment_intents/{payment_intent['payment_intent_id']}/confirmation", headers={'Content-Type': 'application/json', 'Accept': 'application/json, text/plain, */*', 'Authorization': f"Bearer {login()}"}, data=None)
+                response = requests.request("POST", url=f"{BASE_URL}/api/v1/payment_intents/{payment_intent['payment_intent_id']}/confirmation", headers={'Content-Type': HEADER_APPLICATION_JSON, 'Accept': HEADER_ACCEPT_ALL, 'Authorization': f"Bearer {login()}"}, data=None)
                 if response.status_code == 200:
                     send_mail_notification(sender=properties.get_property('username'), to=properties.get_property('username'), subject=f"Playtomic Bot: Court Booked: {start}", body=f"Hi, The following court has been booked {start}")
                     return response.json()
     except Exception as e:
-        logging.error(f"Error returning tenant availability")
+        logging.error(f"Error returning tenant availability: {e}")
         return ''
     
     
@@ -159,7 +161,6 @@ def send_mail_notification(sender, to, subject, body):
     smtp_server.sendmail(sender, [to], msg.as_string())
     smtp_server.quit()
     
-    pass
     
 def random_delay():
     MAX_WAIT_SECONDS = 4

@@ -7,6 +7,6 @@ def get_property(name):
         yaml_file = yaml.safe_load(file)
         try:
             return yaml_file[name]
-        except:
+        except Exception:
             return None
     
