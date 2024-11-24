@@ -141,8 +141,8 @@ if __name__ == "__main__":
             if not check_if_target_day_already_booked(target_date=target_date.strftime('%m-%d-%Y')):
                 if not book_target_day(target_date=target_date, club_id=properties.get_property('tenant_id_central')):
                     logging.info(f"---------------------No Available SLOTS -- Central -- {target_date.strftime('%m-%d-%Y')}")
-                    if not book_target_day(target_date=target_date, club_id=properties.get_property('tenant_id_alday')):
-                        logging.info(f"---------------------No Available SLOTS -- Alday -- {target_date.strftime('%m-%d-%Y')}")
+                    # if not book_target_day(target_date=target_date, club_id=properties.get_property('tenant_id_alday')):
+                    #     logging.info(f"---------------------No Available SLOTS -- Alday -- {target_date.strftime('%m-%d-%Y')}")
 
             else:
                 logging.info(f"______Current day is listed as already booked: {target_date.strftime('%m-%d-%Y')}______")
