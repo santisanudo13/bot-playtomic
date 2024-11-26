@@ -9,7 +9,7 @@ import properties as properties
 BOOKING_FILENAME='booked_days.yml'
 # Initialize logging
 def init_logging(current_date):
-    _logformatter_ = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
+    _logformatter_ = logging.Formatter("%(asctime)s [%(threadName)s] [%(levelname)s]  %(message)s")
     _rootlogger_ = logging.getLogger()
     _rootlogger_.setLevel(logging.INFO)
 
@@ -133,7 +133,7 @@ if __name__ == "__main__":
     current_date=arrow.now()
     init_logging(current_date=current_date)
     
-    for index in range(2, 5, 1):
+    for index in range(5, 1, -1):
 
         logging.info("________________________________________________________________________________")
         target_date = arrow.now().shift(days=index)
@@ -141,8 +141,8 @@ if __name__ == "__main__":
             if not check_if_target_day_already_booked(target_date=target_date.strftime('%m-%d-%Y')):
                 if not book_target_day(target_date=target_date, club_id=properties.get_property('tenant_id_central')):
                     logging.info(f"---------------------No Available SLOTS -- Central -- {target_date.strftime('%m-%d-%Y')}")
-                    # if not book_target_day(target_date=target_date, club_id=properties.get_property('tenant_id_alday')):
-                    #     logging.info(f"---------------------No Available SLOTS -- Alday -- {target_date.strftime('%m-%d-%Y')}")
+                    if not book_target_day(target_date=target_date, club_id=properties.get_property('tenant_id_alday')):
+                        logging.info(f"---------------------No Available SLOTS -- Alday -- {target_date.strftime('%m-%d-%Y')}")
 
             else:
                 logging.info(f"______Current day is listed as already booked: {target_date.strftime('%m-%d-%Y')}______")

@@ -155,7 +155,7 @@ def send_mail_notification(sender, to, subject, body):
     
     
 def random_delay():
-    MAX_WAIT_SECONDS = 4
+    MAX_WAIT_SECONDS = 3
     time.sleep(random.randrange(1,10)*MAX_WAIT_SECONDS/10)
     
 
