@@ -100,7 +100,7 @@ def book_target_day(target_date, club_id):
         actual_time = arrow.now().replace(hour=int(time.split(':')[0]), minute=int(time.split(':')[1]))
         offset_timezone = arrow.now().datetime.utcoffset()
         desired_time_in_app = actual_time - offset_timezone
-        desired_time_in_app_str = desired_time_in_app.strftime("%H:%M")
+        desired_time_in_app_str = desired_time_in_app.strftime("%H:%M:00")
         if court_booked:
             break
 
