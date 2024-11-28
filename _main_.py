@@ -7,6 +7,7 @@ import platomic_api_client as pac
 import properties as properties
 
 BOOKING_FILENAME='booked_days.yml'
+DESIRED_TIMES_TO_BOOK = ['18:00:00', '18:30:00', '19:00:00', '19:30:00',]
 # Initialize logging
 def init_logging(current_date):
     _logformatter_ = logging.Formatter("%(asctime)s [%(threadName)s] [%(levelname)s]  %(message)s")
@@ -95,7 +96,11 @@ def book_target_day(target_date, club_id):
     
     court_booked = False
 
-    for time in ['17:00:00', '17:30:00', '18:00:00', '18:30:00',]:
+    for time in DESIRED_TIMES_TO_BOOK:
+        actual_time = arrow.now().replace(hour=int(time.split(':')[0]), minute=int(time.split(':')[1]))
+        offset_timezone = arrow.now().datetime.utcoffset()
+        desired_time_in_app = actual_time - offset_timezone
+        desired_time_in_app_str = desired_time_in_app.strftime("%H:%M")
         if court_booked:
             break
 
@@ -112,7 +117,7 @@ def book_target_day(target_date, club_id):
                         if court_booked:
                             break
 
-                        if slot['duration'] == 90 and slot['start_time'] == time:
+                        if slot['duration'] == 90 and slot['start_time'] == desired_time_in_app_str:
                             start = f"{target_date.strftime('%Y-%m-%dT')}{slot['start_time']}"
                             logging.info(f"      Duration is 90 minutes and within optimal time range: {start}. Booking court {resources[num_court]['name']}......")
                         
